@@ -27,24 +27,15 @@ exports.AnalyzeImage = (event) => {
   console.log (object.name);
   console.log(`Analyzing ${file.name}.`);
 
-  client.safeSearchDetection(file).then(response => {
-	const detections = response[0].safeSearchAnnotation;
-	console.log(`Adult: ${detections.adult}`);
-    	console.log(`Spoof: ${detections.spoof}`);
-    	console.log(`Medical: ${detections.medical}`);
-    	console.log(`Violence: ${detections.violence}`);
-	}).catch((err) => {
-      		console.error(`Failed to analyze ${file.name}.`, err);
-    	});
-		
-		client.labelDetection(file).then(response => {
-	const detections = response[0].labelDetectionAnnotation;
-	console.log(`Adult: ${detections.adult}`);
-    	console.log(`Spoof: ${detections.spoof}`);
-    	console.log(`Medical: ${detections.medical}`);
-    	console.log(`Violence: ${detections.violence}`);
-	}).catch((err) => {
-      		console.error(`Failed to analyze ${file.name}.`, err);
-    	});
+		client
+  .labelDetection(fileName)
+  .then(results => {
+    const labels = results[0].labelAnnotations;
+    console.log('Labels:');
+    labels.forEach(label => console.log(label.description));
+  })
+  .catch(err => {
+    console.error('ERROR:', err);
+  });
 
 };
